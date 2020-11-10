@@ -77,7 +77,7 @@ namespace forgeSample.Controllers
         /// Create a new bucket 
         /// </summary>
         [HttpPost]
-        [Route("api/forge/oss/buckets")]
+        [Route("api/forge/oss/createbuckets")]
         public async Task<dynamic> CreateBucket([FromBody]CreateBucketModel bucket)
         {
             BucketsApi buckets = new BucketsApi();
@@ -89,9 +89,26 @@ namespace forgeSample.Controllers
         }
 
         /// <summary>
+        /// Delete a bucket 
+        /// </summary>
+        [HttpPost]
+        [Route("api/forge/oss/deletebuckets")]
+        public async void DeleteBucket([FromBody]DeleteBucketModel bucket)
+        {
+            BucketsApi buckets = new BucketsApi();
+            dynamic token = await OAuthController.GetInternalAsync();
+            buckets.Configuration.AccessToken = token.access_token;
+            buckets.DeleteBucket(bucket.bucketKey);
+        }
+
+        /// <summary>
         /// Input model for CreateBucket method
         /// </summary>
         public class CreateBucketModel
+        {
+            public string bucketKey { get; set; }
+        }
+        public class DeleteBucketModel
         {
             public string bucketKey { get; set; }
         }

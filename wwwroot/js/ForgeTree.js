@@ -61,7 +61,7 @@ function createNewBucket() {
   var bucketKey = $('#newBucketKey').val();
   var policyKey = $('#newBucketPolicyKey').val();
   jQuery.post({
-    url: '/api/forge/oss/buckets',
+    url: '/api/forge/oss/createbuckets',
     contentType: 'application/json',
     data: JSON.stringify({ 'bucketKey': bucketKey, 'policyKey': policyKey }),
     success: function (res) {
@@ -74,6 +74,24 @@ function createNewBucket() {
       console.log(err);
     }
   });
+}
+
+function deleteBucket() {
+  var node = $('#appBuckets').jstree(true).get_selected(true)[0];
+  var bucketKey = node.id;
+  switch (node.type) {
+    case 'bucket':
+      jQuery.post({
+        url: '/api/forge/oss/deletebuckets',
+        contentType: 'application/json',
+        data: JSON.stringify({ 'bucketKey': bucketKey }),
+        success: function (data) {
+          $('#appBuckets').jstree(true).refresh();
+          _this.value = '';
+        }
+      });
+      break;
+  }
 }
 
 function prepareAppBucketTree() {
@@ -143,6 +161,13 @@ function autodeskCustomMenu(autodeskNode) {
             uploadFile();
           },
           icon: 'glyphicon glyphicon-cloud-upload'
+        },
+        deleteBucket: {
+          label: "Delete bucket",
+          action: function () {
+            deleteBucket();
+          },
+          icon: 'glyphicon glyphicon-remove'
         }
       };
       break;
