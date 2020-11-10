@@ -36,6 +36,8 @@ function onDocumentLoadSuccess(doc) {
   var viewables = doc.getRoot().getDefaultGeometry();
   viewer.loadDocumentNode(doc, viewables).then(i => {
     // documented loaded, any action?
+    viewer.loadExtension("CameraRotation");
+    viewer.loadExtension("ModelSummaryExtension");
   });
 }
 
